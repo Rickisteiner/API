@@ -1,0 +1,79 @@
+<!doctype>
+<html>
+
+<head>
+
+  <style>
+
+  img{
+   margin-top: 45px;
+   margin-left: -360px;
+   width: 40%;
+  }
+  input {
+  float: left;
+  margin-bottom: 5px;
+  width: 300px;
+  }
+  button {
+    float: left;
+    margin-bottom: 5px;
+    width: 60px;
+    margin-top:2px;
+  }
+  </style>
+
+</head>  
+
+<body>
+
+    <h1>GIF Image Search</h1>
+    <p>Use the right and left arrows to search through GIFs.</p>
+    <input type="text" placeholder="search by a tag">
+    <button> Submit </button>
+    <img/>
+
+
+  <script>
+  var h1 = document.getElementById("h1");
+  var button = document.querySelector("button");
+
+
+  var photo = function(index){
+
+    var input = document.querySelector("input");
+
+    var search = encodeURI(input.value);
+
+    var url = "http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q="+search;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.addEventListener("load", function(e){
+      var d=xhr.responseText;
+      var parsed=JSON.parse(d);
+      console.log(parsed);
+      var img = document.querySelector("img");
+      img.src= parsed.data[index]["images"]["original"]["url"];
+    });
+    xhr.send();
+  };
+
+  var counter = 0;
+
+  button.addEventListener("click",function(){
+    photo(counter);
+});
+  window.addEventListener("keydown",function(event){
+    if(event.keyCode === 39){
+      var new_counter = counter++ ;
+      photo(new_counter);
+    }
+    else if(event.keyCode === 37){
+      var new_counter = counter-- ;
+      photo(new_counter);
+}
+  });
+
+</script>
+</body>
+</html>
